@@ -1,0 +1,20 @@
+- Sessions in depth/auth/oauth/ouath2/cookies -- JWT Tokens/ bearer
+
+- Hashing in depth
+
+- having project elements separately tested/pydantic
+    - from alchemy: can we provide models for a already running database?
+
+gittig up things
+
+why don't we import the object itself and instead make a router in fast api
+    Middleware and Dependencies
+
+
+checking email error
+
+
+empty passing pydantic
+
+uuid
+
