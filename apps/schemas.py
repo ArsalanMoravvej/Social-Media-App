@@ -40,14 +40,14 @@ class PostResponse(PostBase):
     created_at: datetime
     
     class Config:
-        orm_mod = True
+        orm_mode = True
 
 class PostOut(BaseModel):
     Post: PostResponse
     votes: int
 
     class Config:
-        orm_mod = True
+        orm_mode = True
 
 class Token(BaseModel):
     access_token: str
