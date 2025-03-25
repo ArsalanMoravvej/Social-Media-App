@@ -1,4 +1,4 @@
 __pycache__
-fenv/
+venv/
 .env
 fast_api.rar
