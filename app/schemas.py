@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, conint
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from datetime import datetime
 from typing import Annotated, Optional
 
@@ -16,8 +16,10 @@ class UserResponse(UserBase):
     id:         int
     created_at: datetime
     
-    class Config:
-        orm_mod = True
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid"
+    )
 
 class UserLogin(BaseModel):
     email:    EmailStr
@@ -39,15 +41,19 @@ class PostResponse(PostBase):
     owner: UserResponse 
     created_at: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid"
+    )
 
 class PostOut(BaseModel):
     Post: PostResponse
     votes: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="forbid"
+    )
 
 class Token(BaseModel):
     access_token: str
