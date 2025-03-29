@@ -4,8 +4,8 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from apps.models import Base
-from apps.config import settings
+from app.models import Base
+from app.config import settings
 
 
 db_driver = "postgresql+psycopg2"
