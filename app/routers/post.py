@@ -15,6 +15,7 @@ router = APIRouter(
 # Retrieve all posts
 @router.get("/", response_model=List[schemas.PostOut])
 async def get_posts(db: Session = Depends(get_db),
+                    current_user: models.User = Depends(oauth2.get_current_user),
                     limit: int = 10,
                     skip: int = 0,
                     search: Optional[str] = ""):
@@ -34,7 +35,9 @@ async def get_posts(db: Session = Depends(get_db),
 
 # Retrieve a specific post by ID
 @router.get("/{id}", response_model=schemas.PostOut)
-async def get_post(id: int, db: Session = Depends(get_db)):
+async def get_post(id: int,
+                   db: Session = Depends(get_db),
+                    current_user: models.User = Depends(oauth2.get_current_user)):
 
     #previously without join
     # post = db.query(models.Post).filter(models.Post.id == id).first()
