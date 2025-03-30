@@ -46,16 +46,31 @@ def client(session):
     yield TestClient(app)
 
 @pytest.fixture
-def test_user(client):
-    user_data = {
-        'email': 'johndoe@example.com',
-        'password': 'secret'
-    }
-    response = client.post('/users', json=user_data)
-    assert response.status_code == 201
-    new_user = response.json()
-    new_user['password'] = user_data['password']
-    return new_user
+def test_users(client):
+    users_data = [
+        {
+            'email': 'johndoe@example.com',
+            'password': 'secret'
+        },
+        {
+            'email': 'janedoe@example.com',
+            'password': 'password'
+        }
+    ]
+
+    test_users = []
+    for user_data in users_data:
+        response = client.post('/users', json=user_data)
+        assert response.status_code == 201
+        new_user = response.json()
+        new_user['password'] = user_data['password']
+        test_users.append(new_user)
+
+    return test_users
+
+@pytest.fixture
+def test_user(test_users):
+    return test_users[0]
 
 @pytest.fixture
 def token(test_user):
@@ -68,21 +83,27 @@ def authorized_client(client, token):
     return client
 
 @pytest.fixture
-def test_posts(test_user, session) -> List[models.Post]:
+def test_posts(test_users, session) -> List[models.Post]:
     posts_data = [{
         "title": "first title",
         "content": "first content",
-        "owner_id": test_user['id']
+        "owner_id": test_users[0]['id']
     }, {
         "title": "2nd title",
         "content": "2nd content",
-        "owner_id": test_user['id']
+        "owner_id": test_users[0]['id']
     },
         {
         "title": "3rd title",
         "content": "3rd content",
-        "owner_id": test_user['id']
-    }]
+        "owner_id": test_users[0]['id']
+    },
+    {
+        "title": "4th title",
+        "content": "4th content",
+        "owner_id": test_users[1]['id']
+    }
+    ]
 
     def create_post_model(post):
         return models.Post(**post)
