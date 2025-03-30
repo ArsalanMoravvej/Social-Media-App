@@ -1,4 +1,5 @@
 
+from typing import List
 from fastapi.testclient import TestClient
 from app import models
 from app.main import app
@@ -67,7 +68,7 @@ def authorized_client(client, token):
     return client
 
 @pytest.fixture
-def test_posts(test_user, session):
+def test_posts(test_user, session) -> List[models.Post]:
     posts_data = [{
         "title": "first title",
         "content": "first content",
