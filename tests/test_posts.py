@@ -78,6 +78,10 @@ def test_delete_post_not_exists(authorized_client, test_posts):
     response = authorized_client.delete("/posts/100")
     assert response.status_code == 404
 
+def test_delete_another_user_post(authorized_client, test_user, test_posts):
+    response = authorized_client.delete(f"/posts/{test_posts[3].id}")
+    assert response.status_code == 403
+
 def test_unauthorized_update_post(client, test_posts):
     response = client.put(f"/posts/{test_posts[0].id}", json={"title": "Unauthorized Post",
                                                               "content": "This is an unauthorized post."})
@@ -95,3 +99,10 @@ def test_update_post_not_exists(authorized_client, test_posts):
     response = authorized_client.put("/posts/100", json={"title": "Updated Post",
                                                               "content": "This is an updated post."})
     assert response.status_code == 404
+
+def test_update_another_user_post(authorized_client, test_user, test_posts):
+    response = authorized_client.put(f"/posts/{test_posts[3].id}", json={"title": "Updated Post",
+                                                              "content": "This is an updated post."})
+    assert response.status_code == 403
+
+# Additional tests for error handling and security

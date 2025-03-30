@@ -76,7 +76,6 @@ def test_user(test_users):
 def token(test_user):
     return create_access_token({"user_id": test_user['id']})
 
-
 @pytest.fixture
 def authorized_client(client, token):
     client.headers['Authorization'] = f"Bearer {token}"
