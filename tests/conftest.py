@@ -63,11 +63,7 @@ def token(test_user):
 
 @pytest.fixture
 def authorized_client(client, token):
-    client.headers = {
-        **client.headers,
-        "Authorization": f"Bearer {token}"
-    }
-
+    client.headers['Authorization'] = f"Bearer {token}"
     return client
 
 @pytest.fixture
