@@ -5,7 +5,7 @@ from ..database import get_db
 from sqlalchemy.orm import Session
 
 from typing import Optional, List
-
+ 
 router = APIRouter(
     prefix="/vote",
     tags=['Vote']
@@ -23,9 +23,9 @@ async def vote(vote: schemas.Vote,
 
     vote_quey = db.query(models.Vote).filter(models.Vote.post_id == vote.post_id,
                                              models.Vote.user_id == current_user.id)
-    print(vote_quey)
+
     found_vote = vote_quey.first()
-    print(found_vote)
+
     if vote.dir == 1:
         if found_vote:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT,
