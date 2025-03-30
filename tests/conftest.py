@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.config import settings
 from app.database import get_db, Base
+from app.oauth2 import create_access_token
 
 db_driver = "postgresql"
 db_host = settings.DATABASE_HOSTNAME
@@ -56,7 +57,21 @@ def test_user(client):
     return new_user
 
 @pytest.fixture
-def test_posts(test_user, session, test_user2):
+def token(test_user):
+    return create_access_token({"user_id": test_user['id']})
+
+
+@pytest.fixture
+def authorized_client(client, token):
+    client.headers = {
+        **client.headers,
+        "Authorization": f"Bearer {token}"
+    }
+
+    return client
+
+@pytest.fixture
+def test_posts(test_user, session):
     posts_data = [{
         "title": "first title",
         "content": "first content",
@@ -70,10 +85,6 @@ def test_posts(test_user, session, test_user2):
         "title": "3rd title",
         "content": "3rd content",
         "owner_id": test_user['id']
-    }, {
-        "title": "3rd title",
-        "content": "3rd content",
-        "owner_id": test_user2['id']
     }]
 
     def create_post_model(post):
@@ -83,6 +94,7 @@ def test_posts(test_user, session, test_user2):
     posts = list(post_map)
 
     session.add_all(posts)
+
     # session.add_all([models.Post(title="first title", content="first content", owner_id=test_user['id']),
     #                 models.Post(title="2nd title", content="2nd content", owner_id=test_user['id']), models.Post(title="3rd title", content="3rd content", owner_id=test_user['id'])])
     session.commit()
